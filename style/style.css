@@ -1,0 +1,21 @@
+/* Bulma Import */
+@import "https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css";
+
+.button{
+    margin: 10px;
+    
+    --bulma-border-radius: 0em;
+}
+
+.accueil-button{
+    padding-right: 1em;
+    padding-left: 1em;
+}
+
+.app{
+    margin: 5em;
+}
+
+.userList{
+    margin: 1em;
+}
