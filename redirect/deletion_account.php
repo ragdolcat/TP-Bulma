@@ -13,15 +13,31 @@
 
 session_start();
 
-function Deconnection(){
+function AccountDeletion()
+{
+
+
+    try
+    {
+        $bdd = new PDO("mysql:host=localhost;dbname=tp-bulma;","root","");
+    }
+    catch(Exception $e)
+    {
+        die("Erreur : " . $e->getMessage());
+    }
+
+    $delete = $bdd->prepare("DELETE FROM user WHERE email = :email");
+    $delete->execute(array("email" => $_SESSION['email']));
+
     session_destroy();
 
-    header("Location: ../");
+    echo '<script>window.alert("utilisateur suprimmé."); window.location.href="../";</script>';
     exit();
 }
+
 if(isset($_SESSION['email']))
 {
-    Deconnection();
+    AccountDeletion();
 }
 else
 {

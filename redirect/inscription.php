@@ -24,7 +24,7 @@ function Inscription($email, $password, $confirm){
 
     try
     {
-        $bdd = new PDO("mysql:host=localhost;dbname=bulma;","root","root");
+        $bdd = new PDO("mysql:host=localhost;dbname=tp-bulma;","root","");
     }
     catch(Exception $e)
     {
@@ -38,7 +38,7 @@ function Inscription($email, $password, $confirm){
 
     if($check->fetch())
     {
-        echo '<script>window.alert("Cette Utilisateur existe déjà !"); window.location.href="../inscription/";</script>';
+        echo '<script>window.alert("Cette Utilisateur existe déjà !"); window.location.href="../connexion/";</script>';
         exit();
     }
     
@@ -47,10 +47,19 @@ function Inscription($email, $password, $confirm){
 
     $_SESSION['email'] = $email;
 
+    $req->closeCursor();
+    
     header("Location: ../");
 }
-
-Inscription($_POST['email'],$_POST['password'],$_POST['confirm']);
+if(isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm']))
+{
+    Inscription($_POST['email'],$_POST['password'],$_POST['confirm']);
+}
+else
+{
+    header("Location: ../inscription/");
+    exit();
+}
 
 ?>
 </html>

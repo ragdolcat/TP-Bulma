@@ -31,7 +31,7 @@
                     echo"
                     <div class='navbar-end'>
                         <a class='button is-primary' href='../inscription/'>Inscription</a>
-                        <a class='button is-primary has-background-primary-35' href=''>Connexion</a>
+                        <a class='button is-primary' href=''>Connexion</a>
                     </div>";
                 }
         ?>
@@ -39,32 +39,86 @@
 
     </nav>
     <div class="app">
-        <p class="title is-1">Connexion</p>
+        <p class="title is-1"><?php echo $_GET['email']?></p>
+        
+        <?php
+        try
+        {
+            $bdd = new PDO("mysql:host=localhost;dbname=tp-bulma;","root","");
+        }
+        catch(Exception $e)
+        {
+            die("Erreur : " . $e->getMessage());
+        }
 
-        <div class="form">
-            <form action="../redirect/connexion.php" method="post">
-                <div class="field">
-                    <label class="label">Email</label>
-                    <div class="control">
-                        <input class="input" type="email" name="email" id="email" placeholder="e.x. exemple@gmail.com">
+        $getuser = $bdd->prepare("SELECT ID FROM user WHERE email = :email");
+        $getuser->execute(array("email" => $_GET['email']));
+        $user = $getuser->fetch();
+
+        if(!$user)
+        {
+            echo '<script>alert("Utilisateur non trouvé !"); window.location.href="../";</script>';
+            exit();
+        }
+        else if($_GET['email'] == $_SESSION['email'])
+        {
+            echo '
+            <div class="has-background-dark box">
+                <form action="../redirect/ajouter_post.php" method="post">
+                    <div class="field">
+                        <label class="label">Nouveau post</label>
+                        <div class="control">
+                            <textarea class="textarea" name="content" id="content" placeholder="Écrivez votre publication ici..."></textarea>
+                        </div>
                     </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">Mot de passe</label>
-                    <div class="control">
-                        <input class="input" type="Password" name="password" id="password" placeholder="e.x Po2'1dz*8y#">
-                    </div>
-                </div>
-
-                <div class="field">
-                    
                     <div class="control">
                         <input class="button is-primary-dark" type="reset" value="Reinitialiser">
-                        <input class="button is-primary" type="submit" value="Envoyer">
+                        <input class="button is-primary" type="submit" value="Publier">
                     </div>
-                </div>
-            </form>            
+                </form>
+            </div>';
+        }
+
+        ?>
+        <div>
+            <p class="title is-3">Liste des publication</p>
+            <div class="posts">
+                <?php
+                try
+                {
+                    $bdd = new PDO("mysql:host=localhost;dbname=tp-bulma;","root","");
+                }
+                catch(Exception $e)
+                {
+                    die("Erreur : " . $e->getMessage());
+                }
+
+                $getuser = $bdd->prepare("SELECT ID FROM user WHERE email = :email");
+                $getuser->execute(array("email" => $_GET['email']));
+                $user = $getuser->fetch();
+
+                $req = $bdd->prepare("SELECT content, DATE FROM post WHERE userID = :ID ORDER BY DATE DESC");
+                $req->execute(array("ID" => $user['ID']));
+                $donnees = $req->fetch();
+
+                if(!$donnees)
+                {
+                    echo "<p class='subtitle is-6'>Aucune publication trouvée.</p>";
+                }
+
+                while ($donnees)
+                {
+                    echo "<div class='has-background-dark box'>
+                            <p class='subtitle is-6'>Publié le ".$donnees['DATE']."</p>
+                            <p>".htmlspecialchars($donnees['content'])."</p>
+                          </div>";
+
+                    $donnees = $req->fetch();
+                }
+
+                $req->closeCursor();
+                ?>
+            </div>
         </div>
     </div>
 </body>

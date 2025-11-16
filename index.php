@@ -21,7 +21,7 @@
             {
                 echo "
                 <div class='navbar-end'>
-                    <a class='button is-primary has-background-primary' href=''>".$_SESSION['email']."</a>
+                    <a class='button is-primary has-background-primary' href='./settings/'>".$_SESSION['email']."</a>
                     <a class='button is-primary' href='./redirect/deconnection.php'>Deconnection</a>
                 </div>";
             }
@@ -35,42 +35,42 @@
             }
         ?>
     </nav>
-<div class="app">
-    <p class="title is-1">Bienvenue !</p>
-    <for class="userList">
-        <?php 
-        try
-        {
-            $bdd = new PDO("mysql:host=localhost;dbname=bulma;","root","root");
-        }
-        catch(Exception $e)
-        {
-            die("Erreur : " . $e->getMessage());
-        }
-
-        $req = $bdd->prepare("SELECT ID,email FROM user");
-        $req->execute();
-
-        if(isset($_SESSION['email']))
-        {
-            while ($donnees = $req->fetch())
+    <div class="app">
+        <p class="title is-1">Bienvenue !</p>
+        <div class="userList">
+            <?php 
+            try
             {
-                echo "<a href='./user/".htmlspecialchars($donnees['ID'])."' class='subtitle'>".$donnees['email']."</a> </br>";
+                $bdd = new PDO("mysql:host=localhost;dbname=tp-bulma;","root","");
             }
-        }
-        else
-        {
-            while ($donnees = $req->fetch())
+            catch(Exception $e)
             {
-                echo "<a class='subtitle'>".$donnees['email']."</a> </br>";
+                die("Erreur : " . $e->getMessage());
             }
-        }
-        
-        $req->closeCursor();
 
-        ?>
-    </for>
-</div>
+            $req = $bdd->prepare("SELECT email FROM user");
+            $req->execute();
+
+            if(isset($_SESSION['email']))
+            {
+                while ($donnees = $req->fetch())
+                {
+                    echo "<a href='./user/".$donnees['email']."' class='subtitle'>".$donnees['email']."</a> </br>";
+                }
+            }
+            else
+            {
+                while ($donnees = $req->fetch())
+                {
+                    echo "<a class='subtitle'>".$donnees['email']."</a> </br>";
+                }
+            }
+            
+            $req->closeCursor();
+
+            ?>
+        </div>
+    </div>
 
 </body>
 </html>

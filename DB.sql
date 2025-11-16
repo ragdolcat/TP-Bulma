@@ -15,10 +15,9 @@ CREATE TABLE IF NOT EXISTS user (
 
 CREATE TABLE IF NOT EXISTS `post` (
   `ID` INT(255) unsigned NOT NULL AUTO_INCREMENT,
-  `title` TINYTEXT NOT NULL,
-  `subtitle` TINYTEXT NOT NULL,
+  `DATE` DATE NOT NULL,
   `content` MEDIUMTEXT NOT NULL,
-  `userID` INT(255) unsigned`user` NOT NULL,
-  	PRIMARY KEY `ID` (`ID`),
+  `userID` INT(255) unsigned NOT NULL,
+  PRIMARY KEY `ID` (`ID`),
 	FOREIGN KEY (`userID`) REFERENCES `user`(`ID`)
 ) ENGINE=InnoDB;

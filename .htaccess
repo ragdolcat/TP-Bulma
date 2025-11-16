@@ -1,0 +1,3 @@
+RewriteEngine On
+
+RewriteRule ^user/([a-zA-Z0-9@.]+)$ user/user.php?email=$1 [L,QSA]
