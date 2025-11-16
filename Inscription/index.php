@@ -19,7 +19,7 @@
 </head>
 
 <!-- Content -->
-<body>
+<body>about:blank#blocked
     <nav class="navbar has-background-primary" role="navigation" aria-label="main navigation">
         <div class="navbar-start">
             <a class="button is-primary" href="../">Accueil</a>

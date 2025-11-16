@@ -22,25 +22,30 @@ function connexion($email, $password){
 
     try
     {
-        $bdd = new PDO("mysql:host=localhost;dbname=bulma;","root","root");
+        $bdd = new PDO("mysql:host=localhost;dbname=tp-bulma;","root","");
     }
     catch(Exception $e)
     {
         die("Erreur : " . $e->getMessage());
     }
 
-    $hashed = password_hash($password, PASSWORD_DEFAULT);
-
     $check = $bdd->prepare("SELECT * FROM user WHERE email = :email");
     $check->execute(array("email" => $email,));
 
     $user = $check->fetch();
+
+    if(!$user)
+    {
+        echo '<script>alert("Utilisateur non trouvé !"); window.location.href="../connexion/";</script>';
+        exit();
+    }
 
     if($user['email'] == $email && password_verify($password, $user['password']))
     {
         $_SESSION['email'] = $email;
 
         header("Location: ../");
+        exit();
     }
     else
     {
@@ -48,11 +53,19 @@ function connexion($email, $password){
         exit(); 
     }
     
-
+    $check->closeCursor();
 
 }
+if(isset($_POST['email']) && isset($_POST['password']))
+{   
+    connexion($_POST['email'],$_POST['password']);
+}
+else
+{
+    header("Location: ../connexion/");
+    exit();
+}
 
-connexion($_POST['email'],$_POST['password']);
 
 ?>
 </html>
